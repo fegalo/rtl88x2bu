@@ -4,7 +4,7 @@ name: CI
 
 # Controls when the action will run. 
 on:
-  # Triggers the workflow on push or pull request events but only for the 5.6.1_30362.20181109_COEX20180928-6a6a branch
+  # Triggers the workflow on push or pull request events but only for these branchs
   push:
     branches: [ create-release ]
   pull_request:
@@ -25,10 +25,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-      
+      # Installs dependencies to build the package
       - name: Install dependencies
         run: sudo apt install dkms debhelper
 
@@ -40,3 +37,15 @@ jobs:
           sudo dkms add -m rtl88x2bu -v ${VER}
           sudo dkms build -m rtl88x2bu -v ${VER}
           sudo dkms mkdeb -m rtl88x2bu -v ${VER}
+
+      # Creates a release draft with the attached package
+      - name: Create Release Draft
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref }}
+          name: Release ${{ github.ref }}
+          draft: true
+          files: |
+            rtl88x2bu-dkms*.deb
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
