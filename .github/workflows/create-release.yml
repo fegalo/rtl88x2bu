@@ -39,13 +39,13 @@ jobs:
           sudo dkms mkdeb -m rtl88x2bu -v ${VER}
 
       # Creates a release draft with the attached package
-      - name: Create Release Draft
+      - name: Create release draft
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref }}
           name: Release ${{ github.ref }}
           draft: true
           files: |
-            rtl88x2bu-dkms*.deb
+            /var/lib/dkms/rtl88x2bu/5.6.1/deb/rtl88x2bu-dkms*.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
