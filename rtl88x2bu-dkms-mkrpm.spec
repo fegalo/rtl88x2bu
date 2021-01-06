@@ -15,6 +15,7 @@ Release:	1dkms
 BuildArch:	noarch
 Group:		System/Kernel
 Requires: 	dkms >= 1.95
+BuildRequires:
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root/
 
 %description
