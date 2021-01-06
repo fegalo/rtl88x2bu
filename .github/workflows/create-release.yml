@@ -27,7 +27,7 @@ jobs:
 
       # Installs dependencies to build the package
       - name: Install dependencies
-        run: sudo apt install dkms rpm
+        run: sudo apt install dkms debhelper rpm
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
@@ -36,7 +36,8 @@ jobs:
           sudo rsync -rvhP ./ /usr/src/rtl88x2bu-${VER}
           sudo dkms add -m rtl88x2bu -v ${VER}
           sudo dkms build -m rtl88x2bu -v ${VER}
-          sudo dkms mkrpm -m rtl88x2bu -v ${VER} --source-only
+          sudo dkms mkdeb -m rtl88x2bu -v ${VER}
+          sudo dkms mkrpm -m rtl88x2bu -v ${VER}
 
       # Creates a release draft with the attached package
       - name: Create release draft
@@ -46,6 +47,7 @@ jobs:
           name: Release ${{ github.ref }}
           draft: true
           files: |
-            /var/lib/dkms/rtl88x2bu/5.6.1/deb/rtl88x2bu-dkms*.deb
+            /var/lib/dkms/rtl88x2bu/*/deb/rtl88x2bu-dkms*.deb
+            /var/lib/dkms/rtl88x2bu/*/rpm/rtl88x2bu-*.rpm
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
